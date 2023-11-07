@@ -29,7 +29,7 @@ class DocumentoController extends Controller
     public function storeDocument(Request $request)
     {
         $this->validate($request, [
-            'codigo' => ['required'],
+            'codigo' => ['required', 'unique:documentos,codigo'],
             'nombre' => ['required'],
             'contenido' => ['required'],
             'proceso_id' => ['required'],

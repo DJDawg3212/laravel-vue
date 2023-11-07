@@ -113,10 +113,11 @@ const updateDocument = () => {
         onSuccess: () => {
             alert('Documento Actualizado Correctamente');
             closeModal();
-            form.reset()
+            form.reset();
         },
         onError: () => {
             alert('Sucedio Un Error', "error");
+            form.reset()
         }
     });
 };
