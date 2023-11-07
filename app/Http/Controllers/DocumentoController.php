@@ -10,81 +10,75 @@ use Inertia\Inertia;
 
 class DocumentoController extends Controller
 {
-    public function index()
+    public function viewIndex()
     {
-        $documents = Documento::all();
+        $documents = Documento::with('tipo_doc', 'proceso')->get();
         $tipoDoc = TipoDoc::all();
         $proceso = Proceso::all();
 
+        $lastDocumentId = Documento::max('id');
+
         return Inertia::render('Documents/Index', [
             'documents' => $documents,
-            'tipoDoc' => $tipoDoc,
-            'proceso' => $proceso,
+            'tipoDocs' => $tipoDoc,
+            'procesos' => $proceso,
+            'lastDocumentId' => $lastDocumentId,
         ]);
     }
 
-    public function create()
-    {
-        //
-    }
-
-    public function store(Request $request)
+    public function storeDocument(Request $request)
     {
         $this->validate($request, [
-            'doc_codigo' => ['required', 'unique:doc_documentos.doc_codigo'],
-            'doc_nombre' => ['required'],
-            'doc_contenido' => ['required'],
-            'pro_proceso_id' => ['required'],
-            'tip_tipo_doc_id' => ['required'],
+            'codigo' => ['required'],
+            'nombre' => ['required'],
+            'contenido' => ['required'],
+            'proceso_id' => ['required'],
+            'tipo_doc_id' => ['required'],
         ]);
 
-        Documento::create([
-            'doc_codigo' => $request->doc_codigo,
-            'doc_nombre' => $request->doc_nombre,
-            'doc_contenido' => $request->doc_contenido,
-            'pro_proceso_id' => $request->pro_proceso_id,
-            'tip_tipo_doc_id' => $request->tip_tipo_doc_id,
+        $documento = Documento::create([
+            'codigo' => $request->codigo,
+            'nombre' => $request->nombre,
+            'contenido' => $request->contenido,
+            'proceso_id' => $request->proceso_id,
+            'tipo_doc_id' => $request->tipo_doc_id,
         ]);
 
-        return redirect('documents');
+        $documento->save();
+
+        return redirect('documentsView');
     }
 
-    public function show(Documento $documento)
+    public function updateDocument(Request $request, $id)
     {
-        //
-    }
+        $documento = Documento::find($id);
 
-    public function edit(Documento $documento)
-    {
-        //
-    }
-
-    public function update(Request $request, Documento $documento)
-    {
         $this->validate($request, [
-            'doc_codigo' => ['required', 'unique:doc_documentos.doc_codigo'],
-            'doc_nombre' => ['required'],
-            'doc_contenido' => ['required'],
-            'pro_proceso_id' => ['required'],
-            'tip_tipo_doc_id' => ['required'],
+            'id' => ['required'],
+            'codigo' => ['required'],
+            'nombre' => ['required'],
+            'contenido' => ['required'],
+            'proceso_id' => ['required'],
+            'tipo_doc_id' => ['required'],
         ]);
 
         $documento->fill([
-            'doc_codigo' => $request->doc_codigo,
-            'doc_nombre' => $request->doc_nombre,
-            'doc_contenido' => $request->doc_contenido,
-            'pro_proceso_id' => $request->pro_proceso_id,
-            'tip_tipo_doc_id' => $request->tip_tipo_doc_id,
+            'codigo' => $request->codigo,
+            'nombre' => $request->nombre,
+            'contenido' => $request->contenido,
+            'proceso_id' => $request->proceso_id,
+            'tipo_doc_id' => $request->tipo_doc_id,
         ]);
         $documento->save();
 
-        return redirect('documents');
+        return redirect('documentsView');
     }
 
-    public function destroy(Documento $documento)
+    public function destroyDocument($id)
     {
+        $documento = Documento::find($id);
         $documento->delete();
 
-        return redirect('documents');
+        return redirect('documentsView');
     }
 }

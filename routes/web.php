@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\ProcesoController;
 use App\Http\Controllers\ProfileController;
@@ -37,9 +38,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('documents', DocumentoController::class);
+    // Route::resource('documents', DocumentoController::class);
+    Route::get('documentsView', [DocumentoController::class, 'viewIndex'])->name('documentsView');
+    Route::post('documentStore', [DocumentoController::class, 'storeDocument'])->name('documentStore');
+    Route::put('documentUpdate/{id}', [DocumentoController::class, 'updateDocument'])->name('documentUpdate');
+    Route::delete('documentDestroy/{id}', [DocumentoController::class, 'destroyDocument'])->name('documentDestroy');
+
     Route::resource('type_doc', TipoDocController::class);
     Route::resource('process', ProcesoController::class);
+    Route::get('configView', [ConfigController::class, 'viewIndex'])->name('configView');
 });
 
 require __DIR__ . '/auth.php';

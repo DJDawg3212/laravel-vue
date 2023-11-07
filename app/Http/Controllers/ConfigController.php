@@ -9,7 +9,7 @@ use Inertia\Inertia;
 
 class ConfigController extends Controller
 {
-    public function index()
+    public function viewIndex()
     {
         $tipoDoc = TipoDoc::all();
         $proceso = Proceso::all();

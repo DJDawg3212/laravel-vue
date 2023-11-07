@@ -17,14 +17,14 @@ class Documento extends Model
         'tipo_doc_id'
     ];
 
-    public function tip_doc()
+    public function tipo_doc()
     {
-        return $this->belongsTo(TipTipoDoc::class);
+        return $this->belongsTo(TipoDoc::class);
     }
 
     public function proceso()
     {
-        return $this->belongsTo(ProProceso::class);
+        return $this->belongsTo(Proceso::class);
     }
 
 }
