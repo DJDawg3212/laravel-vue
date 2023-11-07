@@ -7,59 +7,51 @@ use Illuminate\Http\Request;
 
 class TipoDocController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function storeTypeDoc(Request $request)
     {
-        //
+        $this->validate($request, [
+            'tip_prefijo' => ['required'],
+            'tip_nombre' => ['required'],
+        ]);
+
+        $tipo_doc = TipoDoc::create([
+            'tip_prefijo' => $request->tip_prefijo,
+            'tip_nombre' => $request->tip_nombre,
+        ]);
+
+        $tipo_doc->save();
+
+        return redirect('configView');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function updateTypeDoc(Request $request, $id)
     {
-        //
+        $tipo_doc = TipoDoc::find($id);
+
+        $this->validate($request, [
+            'tip_prefijo' => ['required'],
+            'tip_nombre' => ['required'],
+        ]);
+
+        $tipo_doc->fill([
+            'tip_prefijo' => $request->tip_prefijo,
+            'tip_nombre' => $request->tip_nombre,
+        ]);
+
+        $tipo_doc->save();
+
+        return redirect('configView');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function destroyTypeDoc($id)
     {
-        //
-    }
+        $tipo_doc = TipoDoc::find($id);
+        $tipo_doc->delete();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(TipoDoc $tipoDoc)
-    {
-        //
-    }
+        if ($tipo_doc->documents()->count() > 0) {
+            return redirect('configView')->with('error', 'No puedes eliminar este tipo porque tiene documentos relacionados.');
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(TipoDoc $tipoDoc)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, TipoDoc $tipoDoc)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(TipoDoc $tipoDoc)
-    {
-        //
+        return redirect('configView');
     }
 }

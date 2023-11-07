@@ -38,15 +38,24 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Route::resource('documents', DocumentoController::class);
+    // RUTAS PARA CRUD DE DOCUMENTOS
     Route::get('documentsView', [DocumentoController::class, 'viewIndex'])->name('documentsView');
     Route::post('documentStore', [DocumentoController::class, 'storeDocument'])->name('documentStore');
     Route::put('documentUpdate/{id}', [DocumentoController::class, 'updateDocument'])->name('documentUpdate');
     Route::delete('documentDestroy/{id}', [DocumentoController::class, 'destroyDocument'])->name('documentDestroy');
 
-    Route::resource('type_doc', TipoDocController::class);
-    Route::resource('process', ProcesoController::class);
+    // RUTA PARA OBTENER VISTA PRINCIPAL DE CONFIG
     Route::get('configView', [ConfigController::class, 'viewIndex'])->name('configView');
+
+    // RUTAS PARA PROCESOS
+    Route::post('processStore', [ProcesoController::class, 'storeProcess'])->name('processStore');
+    Route::put('processUpdate/{id}', [ProcesoController::class, 'updateProcess'])->name('processUpdate');
+    Route::delete('processDestroy/{id}', [ProcesoController::class, 'destroyProcess'])->name('processDestroy');
+
+    // RUTAS PARA TIPO
+    Route::post('type_docStore', [TipoDocController::class, 'storeTypeDoc'])->name('type_docStore');
+    Route::put('type_docUpdate/{id}', [TipoDocController::class, 'updateTypeDoc'])->name('type_docUpdate');
+    Route::delete('type_docDestroy/{id}', [TipoDocController::class, 'destroyTypeDoc'])->name('type_docDestroy');
 });
 
 require __DIR__ . '/auth.php';

@@ -16,6 +16,6 @@ class TipoDoc extends Model
 
     public function documents()
     {
-        return $this->hasMany(DocDocumento::class);
+        return $this->hasMany(Documento::class);
     }
 }

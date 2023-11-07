@@ -7,59 +7,52 @@ use Illuminate\Http\Request;
 
 class ProcesoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function storeProcess(Request $request)
     {
-        //
+        $this->validate($request, [
+            'pro_prefijo' => ['required'],
+            'pro_nombre' => ['required'],
+        ]);
+
+        $proceso = Proceso::create([
+            'pro_prefijo' => $request->pro_prefijo,
+            'pro_nombre' => $request->pro_nombre,
+        ]);
+
+        $proceso->save();
+
+        return redirect('configView');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function updateProcess(Request $request, $id)
     {
-        //
+        $proceso = Proceso::find($id);
+
+        $this->validate($request, [
+            'pro_prefijo' => ['required'],
+            'pro_nombre' => ['required'],
+        ]);
+
+        $proceso->fill([
+            'pro_prefijo' => $request->pro_prefijo,
+            'pro_nombre' => $request->pro_nombre,
+        ]);
+
+        $proceso->save();
+
+        return redirect('configView');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function destroyProcess($id)
     {
-        //
-    }
+        $proceso = Proceso::find($id);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Proceso $proceso)
-    {
-        //
-    }
+        if ($proceso->documents()->count() > 0) {
+            return response()->json(['message' => 'No se puede eliminar el proceso debido a documentos relacionados.'], 422);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Proceso $proceso)
-    {
-        //
-    }
+        $proceso->delete();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Proceso $proceso)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Proceso $proceso)
-    {
-        //
+        return redirect('configView');
     }
 }
